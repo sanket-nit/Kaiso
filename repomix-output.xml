@@ -1541,7 +1541,7 @@ Learn more about the power of Turborepo:
 
 <file path="package.json">
 {
-  "name": "draw-app",
+  "name": "kaiso",
   "private": true,
   "scripts": {
     "build": "turbo run build",

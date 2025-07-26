@@ -1,5 +1,5 @@
 {
-  "name": "draw-app",
+  "name": "kaiso",
   "private": true,
   "scripts": {
     "build": "turbo run build",
