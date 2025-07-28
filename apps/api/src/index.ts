@@ -1,43 +1,33 @@
-import express from "express";
-
-const app = express();
+import express, { NextFunction, Request, Response, Express } from "express";
+import authRouter from "./routes/auth.routes";
+import { AppError } from "@repo/types";
+const app: Express = express();
 
 app.use(express.json())
 
-app.get("/", (req, res) => {
-  res.send("Hello")
-})
-
-app.post('/signup', (req, res) => {
-  const {username, email, password} = req.body;
-  if(!username || !email || !password) {
-    return res.status(400).send({
-      message: 'All fields required'
-    })
-  }
-  console.log(username, email, password);
+app.get("/", (req: Request, res: Response) => {
   res.send({
-    status: 'success'
+    status: "ok",
+    message:"API is up and running"
   })
 })
 
-app.post('/signin', (req, res) => {
-  const {email, password} = req.body;
-  if(!email || !password) {
-    return res.status(400).send({
-      message: 'All fields required'
-    })
+app.use("/api/auth", authRouter);
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  if (err instanceof AppError) {
+    return res.status(err.statusCode).json({
+      status: 'error',
+      message: err.message,
+      errors: err.errors
+    });
   }
-  console.log(email, password);
-  res.send({
-    status: 'success'
-  })
-})
 
-app.post('/create-room', (req, res) => {
-  
-})
-
-app.listen(3001, () => {
-  console.log("Server started on port 3001");
+  console.error(err); // Log unexpected errors
+  return res.status(500).json({
+    status: 'error',
+    message: "Something went wrong",
+  });
 });
+
+export default app;
