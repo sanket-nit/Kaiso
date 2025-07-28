@@ -7,8 +7,6 @@ import { env } from "../config";
 
 export const SignupHandler = async (req: Request, res: Response) => {
   const { username, email, password, name } = req.body;
-
-  console.log(req.body);
   
   const existingUser = await prisma.user.findFirst({
     where: { OR: [{ email }, { username }] }
